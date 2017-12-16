@@ -1,0 +1,12 @@
+Require(MASS)
+Require(rpart)
+Require(rattle)
+set.seed()					                                                %saves the sample for reproducibility
+test <- c(sample(nrow(elect[1:17,]),3),sample(18:nrow(elect),2))    %randomly samples 3 P-party and 2 O-party rows for the test set
+elect.test <- elect[test,]			                                    %assigns sample to test set
+elect.train <- elect[-test,]			                                  %assigns rest of data to training set
+tree <- rpart(Party ~ Question.1 + Question.2 + Question.3 + Question.4 + Question.5 + Question.6 + Question.7 + Question.8 + Question.9 + Question.10 + Question.11 + Question.12, method="class",data=elect.train,control=rpart.control(minsplit=2))
+    %builds the decision tree using the training set and the specified minimum split
+fancyRpartPlot(tree)			                                          %plot the resulting decision tree
+tree.pred <- predict(tree, elect.test, type = “class”)	            %uses the resulting decision tree on the test set to predict party
+table(tree.pred,elect.test$Party)		                                %creates a table prediction results
