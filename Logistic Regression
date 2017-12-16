@@ -1,0 +1,7 @@
+Require(pscl)
+bank <- read.csv("bank.csv")
+mod <- glm(Status ~ Agent + Direct + Branch,family="binomial",data=bank)
+summary(mod)
+anova(mod, test="Chisq")
+BIC(mod)
+pR2(mod)
