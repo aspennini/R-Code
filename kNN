@@ -1,0 +1,11 @@
+Require(class)
+Require(gmodels)
+normalize <- function(x) {return ((x - mean(x))/sd(x))}
+brc.n <- as.data.frame(lapply(brc[2:31], normalize))
+train <- sample(1:nrow(brc), size=nrow(brc)*(2/3))
+brc.train <- brc.n[train,]
+brc.test <- brc.n[-train,]
+brc.train.labels <- brc[train, 1]
+brc.test.labels <- brc[-train, 1]
+brc.test.pred <- knn(train = brc.train, test = brc.test, cl = brc.train.labels, k=1)
+CrossTable(x = brc.test.labels, y = brc.test.pred, prop.chisq=FALSE)
